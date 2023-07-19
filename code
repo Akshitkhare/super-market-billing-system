@@ -1,0 +1,106 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <iomanip>
+
+using namespace std;
+
+// Product class representing each item in the supermarket
+class Product {
+public:
+    string name;
+    double price;
+
+    Product(string name, double price) : name(name), price(price) {}
+};
+
+// Supermarket class to handle billing
+class Supermarket {
+private:
+    vector<Product> products;
+    vector<Product> cart;
+
+public:
+    Supermarket() {
+        // Initialize products with their names and prices
+        products.push_back(Product("Milk", 2.5));
+        products.push_back(Product("Bread", 1.0));
+        products.push_back(Product("Eggs", 3.0));
+        // Add more products as needed
+    }
+
+    void displayProducts() {
+        cout << "Available products:" << endl;
+        for (const auto& product : products) {
+            cout << product.name << " - $" << fixed << setprecision(2) << product.price << endl;
+        }
+    }
+
+    void addToCart(string productName) {
+        for (const auto& product : products) {
+            if (product.name == productName) {
+                cart.push_back(product);
+                cout << productName << " added to cart." << endl;
+                return;
+            }
+        }
+        cout << "Product not found. Please check the product name." << endl;
+    }
+
+    void displayCart() {
+        if (cart.empty()) {
+            cout << "Your cart is empty." << endl;
+            return;
+        }
+
+        double total = 0.0;
+        cout << "Your cart:" << endl;
+        for (const auto& product : cart) {
+            cout << product.name << " - $" << fixed << setprecision(2) << product.price << endl;
+            total += product.price;
+        }
+
+        cout << "Total: $" << fixed << setprecision(2) << total << endl;
+    }
+};
+
+int main() {
+    Supermarket supermarket;
+    int option;
+
+    do {
+        cout << "===== Supermarket Billing System =====" << endl;
+        cout << "1. Display available products" << endl;
+        cout << "2. Add product to cart" << endl;
+        cout << "3. Display cart and total bill" << endl;
+        cout << "4. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> option;
+
+        switch (option) {
+            case 1:
+                supermarket.displayProducts();
+                break;
+            case 2: {
+                string productName;
+                cout << "Enter product name to add to cart: ";
+                cin.ignore();
+                getline(cin, productName);
+                supermarket.addToCart(productName);
+                break;
+            }
+            case 3:
+                supermarket.displayCart();
+                break;
+            case 4:
+                cout << "Thank you for shopping with us!" << endl;
+                break;
+            default:
+                cout << "Invalid option. Please try again." << endl;
+        }
+
+    } while (option != 4);
+
+    return 0;
+}
+
